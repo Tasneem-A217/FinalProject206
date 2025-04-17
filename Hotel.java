@@ -4,7 +4,7 @@ public class Hotel {
     private String emailAddress;
     private String checkInTime;
     private String checkOutTime;
-    //private Reservation reservation;
+    private Reservation reservation;
 
     public Hotel(String hotelName,String phoneNumber, String emailAddress, String checkInTime, String checkOutTime ){
          this.hotelName = hotelName;
