@@ -27,6 +27,10 @@ public class Guest {
         Occupancy++;
     }
 
+    public Guest(Guest guest) {
+        //TODO Auto-generated constructor stub
+    }
+
     //Accessors (getter methods)
     public String getguestID (){
         return this.guestID;
@@ -48,20 +52,35 @@ public class Guest {
     }
 
     //mutators (setter methods)
-    //length validation?
     public void setguestID (String guestID){
         if(guestID.equals("") && guestID.length() != 5)
         throw new IllegalArgumentException(" Error! The reservation ID cannot be blank and must have a length of 5");
     else 
         this.guestID = guestID;
     }
-    //make sure its only alphabet?
-    public void setguestName (String guestName){
-        this.guestID = guestName;
-    }
     //validation using is digit 
     public void setguestPhone (String guestPhone){
-        this.guestID = guestPhone;
+        boolean validPhoneNum = true;
+        if(guestPhone.length() != 10) {
+            validPhoneNum = false; 
+        }
+        int x=0 ;
+        while (validPhoneNum && x < guestPhone.length()){
+            if (!Character.isDigit(guestPhone.charAt(x))){
+                validPhoneNum = false; 
+                break;
+                 }
+            else {
+                x++;
+                 }
+        }
+        if (validPhoneNum){
+            this.guestPhone = guestPhone;
+        }
+        else {
+            throw new IllegalArgumentException("Error! Enter a vlid phone number");
+        }
+        
     }
     public void setguestAddress (String guestAddress){
     if(!guestAddress.equals(""))
