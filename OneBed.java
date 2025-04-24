@@ -7,6 +7,8 @@ public class OneBed extends Room {
     OneBed () {
         super();
         setBedType("Twin");
+
+        ImplementationClass.Rooms[Room.getNumOfRooms()] = this;
     }
 
     /**
@@ -19,6 +21,9 @@ public class OneBed extends Room {
     OneBed (int roomNumber, String roomType, double pricePerNight, String bedType) {
         super(roomNumber, roomType, pricePerNight);
         setBedType(bedType);
+
+        ImplementationClass.Rooms[Room.getNumOfRooms()] = this;
+        System.out.println(ImplementationClass.Rooms[Room.getNumOfRooms()]);
     }
 
     /**
@@ -27,9 +32,9 @@ public class OneBed extends Room {
      */
     public void setBedType (String bedType) {
         if (bedType.equals("") || bedType == null) {
-            this.bedType = bedType;
-        } else {
             throw new IllegalArgumentException("Bed type must not be empty or null");
+        } else {
+            this.bedType = bedType;
         }
     }
 
