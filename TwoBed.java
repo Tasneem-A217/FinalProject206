@@ -8,6 +8,8 @@ public class TwoBed extends Room {
         super();
         String[] a = new String[] {"Twin", "Twin"};
         setBedTypes(a);
+
+        ImplementationClass.Rooms[Room.getNumOfRooms()] = this;
     }
 
     /**
@@ -20,6 +22,8 @@ public class TwoBed extends Room {
     TwoBed (int roomNumber, String roomType, double pricePerNight, String[] bedTypes) {
         super(roomNumber, roomType, pricePerNight);
         setBedTypes(bedTypes);
+
+        ImplementationClass.Rooms[Room.getNumOfRooms()] = this;
     }
 
     /**
