@@ -84,6 +84,12 @@ public class Room {
     public double getPricePerNight () {return this.pricePerNight;}
 
     /**
+     * Accessor. Returns the Number of Rooms
+     * @return Returns Number of Rooms (Static Method)
+     */
+    public static int getNumOfRooms () {return Room.numOfRooms;}
+
+    /**
      * Special Purpose. Essentially a Setter for the static numOfRooms variable
      * @param numOfRooms New numOfRooms
      */
