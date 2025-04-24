@@ -4,7 +4,10 @@ public class Hotel {
     private String emailAddress;
     private String checkInTime;
     private String checkOutTime;
-    private Reservation reservation;
+    private Reservation[] reservation;
+    private Room[] room;
+    private Employee[] employee;
+    private Guest[] guest;
 
     public Hotel(String hotelName,String phoneNumber, String emailAddress, String checkInTime, String checkOutTime ){
          this.hotelName = hotelName;
@@ -12,6 +15,10 @@ public class Hotel {
          this.emailAddress = emailAddress;
          this.checkInTime = checkInTime;
          this.checkOutTime = checkOutTime;
+        setRoom(room);
+        setEmployee(employee);
+        setGuest(guest);
+        setReservation(reservation);
 
     }
     public String getHotelName(){return this.hotelName;}
@@ -19,6 +26,10 @@ public class Hotel {
     public String getEmailAddress(){return this.emailAddress;}
     public String getCheckInTime(){return this.checkInTime;}
     public String getCheckOutTime(){return this.checkOutTime;}
+    public Room getRoom() { return this.room; }
+    public Employee getEmployee() { return this.employee; }
+    public Guest getGuest() { return this.guest; }
+    public Reservation getReservation() { return this.reservation; }
 
     public void  setHotelName(String hotelName){
         if(hotelName.equals(""))
@@ -40,13 +51,30 @@ public class Hotel {
         if(checkOutTime.equals(""))
         this.checkOutTime = checkOutTime;
     }
+    public void setRoom(Room room) {
+      this.room = room;
+   }   
+    public void setEmployee(Employee employee) {
+      this.room = room;
+   }   
+    public void setGuest(Guest guest) {
+      this.room = room;
+   }   
+    public void setReservation(Reservation reservation) {
+      this.room = room;
+   }   
+     
 
     public String toString(){
         return "Hotel Name: " + this.getHotelName() + "\n"
         + "Hotel Phone number: " + this.getPhoneNumber() + "\n"
         + "Address: " + this.getEmailAddress() + "\n"
         + "Check In: "+ this.getCheckInTime() + "\n"
-        + "Check Out: " + this.getCheckOutTime() + "\n";
+        + "Check Out: " + this.getCheckOutTime() + "\n"
+            + "Room: "+ this.getRoom() +  "\n"
+            + "Reservation: " + this.getReservation() + "\n"
+            + "Guest: " + this.getGuest() + "\n"
+            + "Employee: " + this.getEmployee() + "\n";
     }
 }
 
