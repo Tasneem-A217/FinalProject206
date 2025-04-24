@@ -16,7 +16,7 @@ public class Reservation {
         numOfReservation++;
     }
 
-    Reservation(String reservationID, String arrivalDate, String departureDate, double totalPrice, String guestID, String guestName, String guestPhone, String guestAddress, String guestEmail ){
+    public Reservation(String reservationID, String arrivalDate, String departureDate, double totalPrice, String guestID, String guestName, String guestPhone, String guestAddress, String guestEmail ){
         this.reservationID = "";
         this.arrivalDate = "";
         this.departureDate = "";
@@ -38,9 +38,7 @@ public class Reservation {
     public double gettotalPrice(){
         return this.totalPrice;
     }
-    public Guest getGuest (){
-        return new guest(this.guest); 
-    }
+    public Guest getGuest(){return new Guest(this.guest);}
     public static int getnumOfReservation(){
         return numOfReservation;
     }
@@ -54,11 +52,49 @@ public class Reservation {
     }
     //validation using is digit 
     public void setarrivalDate (String arrivalDate){
-        this.arrivalDate = arrivalDate;
+        boolean validArrivalDate = true;
+        if(arrivalDate.length() != 8) {
+            validArrivalDate = false; 
+        }
+        int x=0 ;
+        while (validArrivalDate && x < arrivalDate.length()){
+            if (!Character.isDigit(arrivalDate.charAt(x))){
+                validArrivalDate = false; 
+                break;
+                 }
+            else {
+                x++;
+                 }
+        }
+        if (validArrivalDate){
+            this.arrivalDate = arrivalDate;
+        }
+        else {
+            throw new IllegalArgumentException("Error! Enter a vlid arrival date");
+        }
     }
     //validation using is digit 
     public void setdepartureDate (String departureDate){
-        this.departureDate = departureDate;
+        boolean validDepartDate = true;
+        if(departureDate.length() != 8) {
+            validDepartDate = false; 
+        }
+        int x=0 ;
+        while (validDepartDate && x < departureDate.length()){
+            if (!Character.isDigit(departureDate.charAt(x))){
+                validDepartDate = false; 
+                break;
+                 }
+            else {
+                x++;
+                 }
+        }
+        if (validDepartDate){
+            this.departureDate = departureDate;
+        }
+        else {
+            throw new IllegalArgumentException("Error! Enter a vlid departure date");
+        }
     }
     public void settotalPrice (double totalPrice){
         if (totalPrice>0)
@@ -67,7 +103,7 @@ public class Reservation {
         throw new IllegalArgumentException("Error! Please enter a valid number");
     }
     public void setguest(Guest guest){
-        this.guest = new Guest (guest); 
+        this.guest = new Guest(guest); 
     }
 
      //toString method 
