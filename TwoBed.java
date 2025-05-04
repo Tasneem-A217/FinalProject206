@@ -1,35 +1,31 @@
+//ZACH
 public class TwoBed extends Room {
     private String[] bedTypes = new String[2];
 
-    /**
-     * Default constructor for the TwoBed object
-     */
+    
     TwoBed () {
         super();
         String[] a = new String[] {"Twin", "Twin"};
         setBedTypes(a);
 
         ImplementationClass.Rooms[Room.getNumOfRooms()] = this;
+        Hotel.setRoom(ImplementationClass.Rooms);
+
+        Room.incrementNumOfRooms();
     }
 
-    /**
-     * Parameterized constructor of the TwoBed object
-     * @param roomNumber Int. Room Number of the TwoBed object
-     * @param roomType String. Room Type of the TwoBed object
-     * @param pricePerNight Double. Price per Night of the TwoBed object
-     * @param bedTypes String[]. Types of the two beds of the TwoBed object
-     */
+    
     TwoBed (int roomNumber, String roomType, double pricePerNight, String[] bedTypes) {
         super(roomNumber, roomType, pricePerNight);
         setBedTypes(bedTypes);
 
         ImplementationClass.Rooms[Room.getNumOfRooms()] = this;
+        Hotel.setRoom(ImplementationClass.Rooms);
+
+        Room.incrementNumOfRooms();
     }
 
-    /**
-     * Mutator. Sets the bedType variable
-     * @param bedTypes String[]. The types of the two beds
-     */
+    
     public void setBedTypes(String[] bedTypes) {
         if (bedTypes.length == 2) {
             if (bedTypes[0].equals("") || bedTypes[0] == null) {
@@ -44,18 +40,12 @@ public class TwoBed extends Room {
         }
     }
 
-    /**
-     * Accessor. Returns the bedTypes array
-     * @return bedTypes array
-     */
     public String[] getBedType () {
         String[] out = this.bedTypes;
         return out;
     }
 
-    /**
-     * Returns the String representation of the TwoBed object
-     */
+
     public String toString () {
         return super.toString() + ", Bed Types: " + this.getBedType()[0] + " and " + this.getBedType()[1];
     }
