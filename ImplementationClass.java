@@ -11,6 +11,11 @@ public class ImplementationClass {
     public static Guest[] allGuests = new Guest[10];
 
 public static void main(String[] args) {
+    // Create default rooms
+    new OneBed(1, "One Bed", 100.0, "Twin");
+    new TwoBed(2, "Two Bed", 250.0, new String[] {"Twin", "Queen"});
+    new OneBed(6, "One Bed", 130.0, "Queen");
+    
     Hotel aHotel = new Hotel(1001, "JAVA INN", "1(800)-111-1111", 
     "JavaHouse@java.net", "03:00PM", "11:00AM");
 
@@ -422,18 +427,20 @@ for(int i=0; i<Guest.getOccupancy(); i++){
 }
 JOptionPane.showMessageDialog(null, output);
 }
-    // Zachs Section - Never tested, but it should work
+    
+    // ############################################### ZACH'S SECTION ####################################################
+
     public static void showRoomOptions() {
+        // Menu code
         String menu = "**ROOM MENU**\nWhat would you like to do?\n\n1. Create Room\n2. Display Room\n3. Remove Room\n4. Back to Main Program\n5. Exit Program";
         int input = -1;
         do {
-            try{
+            try {
                 input = Integer.parseInt(JOptionPane.showInputDialog(menu));
-                }
-                catch(NumberFormatException e){
-                    JOptionPane.showMessageDialog(null,"Please enter right menu option");
-                }
-            input = Integer.parseInt(JOptionPane.showInputDialog(menu));
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "ERROR: Input must be a Number");
+                input = 0;
+            }
 
             switch (input) {
                 case 1:
@@ -458,89 +465,166 @@ JOptionPane.showMessageDialog(null, output);
     }
 
     public static void createRoom() {
-        int rn = Integer.parseInt(JOptionPane.showInputDialog("Enter Room Number: "));
-        int type = Integer.parseInt(JOptionPane.showInputDialog("Enter Number of Beds (1/2): "));
-        int price = Integer.parseInt(JOptionPane.showInputDialog("Enter Price per Night: "));
-        System.out.println(type);
+        int rn = -1;
+        int type = -1;
+        int price = -1;
+
+        // Take in user input and extensively validate it. Should be no more errors now!
+        do {
+            boolean err = false;
+            try {
+                rn = Integer.parseInt(JOptionPane.showInputDialog("Enter Room Number (0-100): "));
+            } catch (NumberFormatException e) {
+                err = true;
+                JOptionPane.showMessageDialog(null, "ERROR: Room Number must be a Number.");
+            }
+            // Ensure all room numbers are unique
+            for (int i = 0; i < Rooms.length; i++) {
+                if (Rooms[i] != null) {
+                    if (Rooms[i].getRoomNumber() == rn) {
+                        err = true;
+                    }
+                }
+            }
+            if (!err) {
+                if (rn < 0 || rn > 100) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Room number invalid. Must be 0 to 100 and unique");
+                }
+            }
+        } while (rn < 0 || rn > 100);
+
+        do {
+            boolean err = false;
+            try {
+                type = Integer.parseInt(JOptionPane.showInputDialog("Enter Number of Beds (1 or 2): "));
+            } catch (NumberFormatException e) {
+                err = true;
+                JOptionPane.showMessageDialog(null, "Number of Beds must be a Number.");
+            }
+            if (!err) {
+                if (type != 1 && type != 2) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Number of Beds must be 1 or 2.");
+                }
+            }
+        } while (type != 1 && type != 2);
+
+        do {
+            boolean err = false;
+            try {
+                price = Integer.parseInt(JOptionPane.showInputDialog("Enter Price per Night (>0): "));
+            } catch (NumberFormatException e) {
+                err = true;
+                JOptionPane.showMessageDialog(null, "ERROR: Price per Night must be a Number.");
+            }
+            if (!err) {
+                if (price <= 0) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Price per night must be more than 0");
+                }
+            }
+        } while (price <= 0);
+
         if (type == 1) {
-            String bedType = JOptionPane.showInputDialog("Enter Bed Type: ");
-            new OneBed(rn, "One Bed", price, bedType);
+            String bedType;
+            do {
+                bedType = JOptionPane.showInputDialog("Enter Bed Type: ");
+                if (bedType.equals("") || bedType == null) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Invalid Bed Type. Must not be empty or null");
+                }
+            } while (bedType.equals("") || bedType == null);
+
+            new OneBed(rn, "One Bed", price, bedType);          // Create new OneBed object with provided values
         } else if (type == 2) {
             String[] bedTypes = new String[2];
-            bedTypes[0] = JOptionPane.showInputDialog("Enter Bed Type 1: ");
-            bedTypes[1] = JOptionPane.showInputDialog("Enter Bed Type 2: ");
-            new TwoBed(rn, "Two Bed", price, bedTypes);
-        } else {
-            throw new IllegalArgumentException("Number of Beds Must Be Either 1 or 2");
-        }
+            do {
+                bedTypes[0] = JOptionPane.showInputDialog("Enter Bed Type 1: ");
+                if (bedTypes[0].equals("") || bedTypes[0] == null) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Invalid Bed Type. Must not be empty or null");
+                }
+            } while (bedTypes[0].equals("") || bedTypes[0] == null);
 
+            do {
+                bedTypes[1] = JOptionPane.showInputDialog("Enter Bed Type 2: ");
+                if (bedTypes[1].equals("") || bedTypes[1] == null) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Invalid Bed Type. Must not be empty or null");
+                }
+            } while (bedTypes[1].equals("") || bedTypes[1] == null);
+
+            new TwoBed(rn, "Two Bed", price, bedTypes);     // Create new TwoBed object with provided values
+        } else {
+            JOptionPane.showMessageDialog(null, "ERROR: Number of Beds must be 1 or 2");
+            createRoom();
+        }
     }
 
-   
-
-    public static int chooseRoomNumber() {
+    public static Room chooseRoom() {
         String output = "Enter Room Number:\n";
-        int input = -1;
-        System.out.println(Room.getNumOfRooms());
-        for (int i = 0; i < Room.getNumOfRooms(); i++) {
-            output += "\n" + Rooms[i + 1].toString();
+
+        for (int i = 0; i < Room.getNumOfRooms(); i++) {    // Loop through each room
+            try {                                           // Try to add it to the output string
+                output += "\n" + Rooms[i].toString();
+            } catch (NullPointerException e) {}             // Catch any null pointer exceptions and ignore them
         }
+        int rn = -1;                                        // Set room number as -1
+        do {                                                
+            try {
+                rn = Integer.parseInt(JOptionPane.showInputDialog(output));
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "ERROR: Room Number must be an Integer");
+            }
+        } while (rn < 0);
 
-        input = Integer.parseInt(JOptionPane.showInputDialog(output));
+        for (int i = 0; i < Rooms.length; i++) {            // Loop through the whole array
+            if (Rooms[i] != null) {                         // If Rooms[i] is not null ...
+                if (Rooms[i].getRoomNumber() == rn) {       // If Rooms[i]'s Room Number is the target Room Number ...
+                    return Rooms[i];                        // Return Rooms[i]
+                }
+            }
+        }
+        return null;                                        // Otherwise, return null
+    }
 
-        if (input >= 0 && input <= Room.getNumOfRooms()) {
-            return input;
-        } else {
-            throw new IllegalArgumentException("Room number must be between 0 and " + Room.getNumOfRooms());
+    public static void displayRoom() {      // If no room parameter ...
+        Room room = chooseRoom();           // Call the chooseRoom method and store result in Room object;
+        if (room != null) {                 // If the room is not null ...
+            displayRoom(room);              // Call the displayRoom method with the room parameter
+        } else {                            // Otherwise, print an error
+            JOptionPane.showMessageDialog(null, "ERROR: Invalid Room");
         }
     }
 
-    public static void displayRoom() {
-        displayRoom(chooseRoomNumber());
-    }
-
-    public static Room searchRoom(int roomNumber){
-        for(int i = 0; i < Room.getNumOfRooms(); i++){
-            if(Rooms[i+1].getRoomNumber() == roomNumber)
-                return Rooms[i+1];
-        }
-        return null;
-    }
-
-    public static  void displayRoom(int roomNumber) {
+    public static void displayRoom(Room roomObj) {
         String output = "SOMETHING WENT WRONG";
-        if (Rooms[roomNumber].getRoomNumber() == roomNumber) {
-            output = Rooms[roomNumber].toString();
-        } else {
-            for (int i = 0; i < Room.getNumOfRooms(); i++) {
-                if (Rooms[i + 1].getRoomNumber() == roomNumber) {
-                    output = Rooms[i + 1].toString();
-                    break;
+        output = roomObj.toString();                // Set output string equal to the object string
+        JOptionPane.showMessageDialog(null, output);    // Show output in dialog box
+    }
+
+    public static void removeRoom() {       // If no room parameter ...
+        Room room = chooseRoom();           // Call the chooseRoom method and store result in room object
+        if (room != null) {                 // If the room is not null ...
+            removeRoom(room);               // Call the removeRoom method with the provided room object
+        } else {                            // Otherwise, print an error
+            JOptionPane.showMessageDialog(null, "ERROR: Invalid Room");
+        }
+    }
+
+    public static void removeRoom(Room room) {
+        int num = -1;                       // Set the num to -1 initally
+        num = room.getRoomNumber();         // Set the num to the room number of the provided room object
+        int roomID = 0;                     // Set the room ID to 0
+
+        for (int i = 0; i < Rooms.length; i++) {        // Loop through the entire Rooms array
+            if (Rooms[i] != null) {                     // If Rooms[i] is not null ...
+                if (Rooms[i].getRoomNumber() == num) {  // If Rooms[i]'s room number is the target room number ...
+                    roomID = i;                         // roomID is i
                 }
             }
         }
-        JOptionPane.showMessageDialog(null, output);
-        showRoomOptions();
-    }
 
-    public static void removeRoom() {
-        removeRoom(chooseRoomNumber());
-    }
-
-    public static void removeRoom(int roomNumber) {
-        int num = -1;
-        if (Rooms[roomNumber].getRoomNumber() == roomNumber) {
-            num = roomNumber;
-        } else {
-            for (int i = 0; i < Room.getNumOfRooms(); i++) {
-                if (Rooms[i + 1].getRoomNumber() == roomNumber) {
-                    num = i + 1;
-                }
-            }
+        for (int i = roomID; i < Room.getNumOfRooms(); i++) {   // Loop through all rooms starting from roomID
+            Rooms[i] = Rooms[i + 1];                            // Move the room objects forward one positon
         }
-        for (int i = num; i < Room.getNumOfRooms(); i++) {
-            Rooms[i + 1] = Rooms[i + 2];
-        }
-        Rooms[Room.getNumOfRooms()] = null;
+        Rooms[Room.getNumOfRooms()] = null;                     // Set the final element to null
+        Hotel.setRoom(Rooms);                                   // Copy the implementation class rooms array to hotel class rooms array
+        Room.decrementNumOfRooms();                             // Call the decrementNumOfRooms method
     }
 };
